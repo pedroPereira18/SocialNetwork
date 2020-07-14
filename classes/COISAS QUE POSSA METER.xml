@@ -1,0 +1,35 @@
+$sql = "INSERT INTO utilizadores (PrimeiroNome,UltimoNome,Username,Email,Password) values ('$PrimeiroNome ', '$UltimoNome','$Username','$Email','$hashed_password') ";
+
+ 	if (!filter_var($Email,FILTER_VALIDATE_EMAIL) && !preg_match("/^[a-zA-Z0-9]*$/",$Username)) 
+ 	{
+ 		header("location: ./index.html?error=invalidmail&user");
+ 		exit();
+ 	}
+ 	else if (!preg_match("/^[a-zA-Z0-9]*$/",$Username)) {
+ 		header("location: ./index.html?error=invalidusername");
+ 		exit();
+ 	}
+ 	if(!mysqli_query($pdo,$sql))
+	{
+		header("location: index.php?error=NotInserted");
+		exit();
+	}
+	else
+	{
+		echo "Inserido com sucesso";
+		echo $hashed_password;
+	}
+	header("refresh:1; url=index.html");
+
+
+
+
+	//TOKENS 
+	$cstrong = TRUE;
+         $token= bin2hex(openssl_random_pseudo_bytes(64,$cstrong));
+         $user_id = DB::query('SELECT id FROM utilizadoress WHERE email =:email', array(':email'=>$email))[0]['id'];
+         DB::query('INSERT INTO logintokenn values (\'\',:token,:user_id)', array(':token'=>sha1($token),':user_id'=>$user_id));
+
+         ////////////////////
+
+         
